@@ -9,6 +9,7 @@ import main.java.JarViewer;
 import main.java.Main;
 
 import java.io.File;
+import java.util.ArrayList;
 
 
 public class Controller {
@@ -39,7 +40,8 @@ public class Controller {
     void openFileAndLoadIt() {
         File selectedJarFile = Main.fileChoose();
         JarViewer jarViewer = new JarViewer();
-        jarViewer.generateClassTree(selectedJarFile.getPath());
+        ArrayList<String> temp = jarViewer.getClassNamesList(selectedJarFile.getPath());
+        jarViewer.getClasses(temp, selectedJarFile.getPath());
         jarViewer.loadTreeView(anchorPane);
         Main.stage.show();
     }

@@ -1,40 +1,43 @@
 package main.java;
 
-import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Rectangle;
-
-import java.io.File;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.NotFoundException;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
-/**
- * @author Crunchify.com
- */
 
 public class JarViewer {
 
     TreeView<FileFromJar> treeView;
+    TreeItem<FileFromJar> tempNode;
 
     public JarViewer() {
         treeView = new TreeView<>();
         TreeItem<FileFromJar> rootTreeItem = new TreeItem<FileFromJar>(new FileFromJar(null, "Jar Name", null));
         treeView.setRoot(rootTreeItem);
+        tempNode = rootTreeItem;
     }
 
-    private final Node rootIcon = new Rectangle(20, 20);
-
-    public ArrayList<FileFromJar> generateClassTree(String crunchifyJarName) {
-        ArrayList<FileFromJar> listOfClasses = new ArrayList<>();
+    public ArrayList<String> getClassNamesList(String jarPath) {
+        ArrayList<String> listOfClasses = new ArrayList<>();
         try {
-
-            JarInputStream crunchifyJarFile = new JarInputStream(new FileInputStream(crunchifyJarName));
-
-            while (createTreeItems(crunchifyJarFile.getNextJarEntry())) ;
+            JarInputStream jarInputStream = new JarInputStream(new FileInputStream(jarPath));
+            JarEntry temp = jarInputStream.getNextJarEntry();
+            while (true) {
+                if (temp == null) {
+                    break;
+                }
+                if (temp.getName().endsWith(".class")) {
+                    listOfClasses.add(getClassName(temp.getName()));
+                }
+                temp = jarInputStream.getNextJarEntry();
+            }
 
         } catch (Exception e) {
             System.out.println("Oops.. Encounter an issue while parsing jar" + e.toString());
@@ -49,28 +52,29 @@ public class JarViewer {
         treeView.prefHeightProperty().bind(anchorPane.heightProperty());
     }
 
-    public boolean createTreeItems(JarEntry crunchifyJar) {
-        String tempClassName;
-        String tempClassPath;
-        TreeItem<FileFromJar> tempTreeItem;
-        TreeItem<FileFromJar> tempNode = treeView.getRoot();
-        if (crunchifyJar == null) {
-            return false;
-        }
-        tempClassPath = crunchifyJar.getName().replaceAll("/", "\\.");
-        tempClassName = tempClassPath.substring(0, tempClassPath.lastIndexOf('.'));
-        tempTreeItem = new TreeItem<FileFromJar>(new FileFromJar(tempClassPath, tempClassName, crunchifyJar.getClass()));
-        tempNode.getChildren().add(tempTreeItem);
-        // Class file -> create Trea Leaf
-        if ((crunchifyJar.getName().endsWith(".class"))) {
-//            if(){
-//
-//            }
-        } else { // dir file -> create Trea node
-            tempNode = tempTreeItem;
-        }
-        return true;
+    public String getClassName(String classNameWithPath) {
+        String temp = classNameWithPath.replaceAll("/", "\\.");
+        temp = temp.substring(0, temp.lastIndexOf('.'));
+        return temp;
 
     }
 
+    public ArrayList<CtClass> getClasses(ArrayList<String> listOfClasses, String jarPath) {
+        ArrayList<CtClass> ctClassesList = new ArrayList<CtClass>();
+        try {
+            ClassPool classPool = new ClassPool(true);
+            classPool.insertClassPath(jarPath);
+            for (String tempClassName : listOfClasses) {
+                ctClassesList.add(classPool.get(tempClassName));
+            }
+        } catch (NotFoundException e) {
+            System.out.println("I couldnt find this crap");
+        } finally {
+            return ctClassesList;
+        }
+    }
+
+    public void makeTree(ArrayList<CtClass> ctClassesList) {
+
+    }
 }
