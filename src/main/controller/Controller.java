@@ -2,11 +2,15 @@ package main.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javassist.CtClass;
+import main.java.CustomTreeItem;
 import main.java.JarViewer;
 import main.java.Main;
+import main.java.TreeMaker;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -41,8 +45,9 @@ public class Controller {
         File selectedJarFile = Main.fileChoose();
         JarViewer jarViewer = new JarViewer();
         ArrayList<String> temp = jarViewer.getClassNamesList(selectedJarFile.getPath());
-        jarViewer.getClasses(temp, selectedJarFile.getPath());
-        jarViewer.loadTreeView(anchorPane);
+        ArrayList<CtClass> tempCtClassList = jarViewer.getClasses(temp, selectedJarFile.getPath());
+        TreeItem<CustomTreeItem> tempTreeRoot = TreeMaker.makeTree(tempCtClassList);
+        jarViewer.loadTreeView(anchorPane, tempTreeRoot);
         Main.stage.show();
     }
 

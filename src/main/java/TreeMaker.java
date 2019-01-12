@@ -2,7 +2,9 @@ package main.java;
 
 
 import com.sun.istack.internal.Nullable;
+import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javassist.CtClass;
 
 import java.util.ArrayList;
@@ -17,11 +19,11 @@ public class TreeMaker {
 
 
     static public TreeItem<CustomTreeItem> makeTree(ArrayList<CtClass> ctClassesList) {
-        String tempPackage;
+        String tempPackageName;
+        Package myPackage;
+        treeOfPackages.put("RootNode", new Package(null, "Root.Node"));
         for (CtClass ctClass : ctClassesList) {
-
-            tempPackage = ctClass.getPackageName();
-
+            addNewClass(ctClass);
         }
         return null;
     }
@@ -35,37 +37,46 @@ public class TreeMaker {
         }
     }
 
-    private static void createNewPackage(String fullClassName) {
-        String packageName = getNameOfPackage(fullClassName);
-        String parentName = getFullNameAfterLastDot(fullClassName);
-        Package where = whereShouldIAddClass(parentName);
+    private static void createNewPackage(String fullPackageName) {
+        String onlyName = getNameOfPackage(fullPackageName);
+        String parentPackageName = getFullNameAfterLastDot(fullPackageName);
+        Package where = whereShouldIAddClass(parentPackageName);
         if (where != null) {
-            // TODO add here
-            treeOfPackages.get(where).getPackagesContent().add(new Package(where, fullClassName));
+            addPackageToTree(new Package(where, fullPackageName), where);
         } else {
-            createNewPackage(parentName);
+            if (parentPackageName == null) {
+                // Add to root
+                Package root = treeOfPackages.get("RootNode");
+                addPackageToTree(new Package(root, onlyName), root);
+                return;
+            }
+            createNewPackage(parentPackageName);
         }
     }
 
+    private static void addPackageToTree(Package myPackage, Package where) {
+        treeOfPackages.get(where).getPackagesContent().add(myPackage);
+    }
+
     private static String getNameOfPackage(String fullClassName) {
-        // TODO -> com.als.coock ---> coock
-        return null;
+        // com.als.name ---> name
+        return fullClassName.substring(fullClassName.lastIndexOf(".") + 1);
     }
 
     private static String getFullNameAfterLastDot(String fullClassName) {
-        // TODO com.als.coock ---> com.als
-        return null;
+        // com.als.name ---> com.als
+        try {
+            return fullClassName.substring(0, fullClassName.lastIndexOf("."));
+        } catch (StringIndexOutOfBoundsException e) {
+            return null;
+        }
     }
 
     @Nullable
     private static Package whereShouldIAddClass(String fullPackageName) {
+        if (fullPackageName == null) return null;
         if (treeOfPackages.containsKey(fullPackageName)) {
             return treeOfPackages.get(fullPackageName);
         } else return null;
     }
 }
-
-
-/*
- *
- * */

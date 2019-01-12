@@ -14,14 +14,11 @@ import java.util.jar.JarInputStream;
 
 public class JarViewer {
 
-    TreeView<FileFromJar> treeView;
-    TreeItem<FileFromJar> tempNode;
+    TreeView<CustomTreeItem> treeView;
+    TreeItem<CustomTreeItem> tempNode;
 
     public JarViewer() {
         treeView = new TreeView<>();
-        TreeItem<FileFromJar> rootTreeItem = new TreeItem<FileFromJar>(new FileFromJar(null, "Jar Name", null));
-        treeView.setRoot(rootTreeItem);
-        tempNode = rootTreeItem;
     }
 
     public ArrayList<String> getClassNamesList(String jarPath) {
@@ -45,8 +42,8 @@ public class JarViewer {
         return listOfClasses;
     }
 
-    public void loadTreeView(AnchorPane anchorPane) {
-
+    public void loadTreeView(AnchorPane anchorPane, TreeItem<CustomTreeItem> root) {
+        treeView.setRoot(root);
         anchorPane.getChildren().add(treeView);
         treeView.prefWidthProperty().bind(anchorPane.widthProperty());
         treeView.prefHeightProperty().bind(anchorPane.heightProperty());
