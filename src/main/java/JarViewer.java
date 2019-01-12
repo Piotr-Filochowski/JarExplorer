@@ -41,12 +41,6 @@ public class JarViewer {
         return listOfClasses;
     }
 
-    public void loadTreeView(AnchorPane anchorPane, TreeItem<Package> root) {
-        treeView.setRoot(root);
-        anchorPane.getChildren().add(treeView);
-        treeView.prefWidthProperty().bind(anchorPane.widthProperty());
-        treeView.prefHeightProperty().bind(anchorPane.heightProperty());
-    }
 
     public String getClassName(String classNameWithPath) {
         String temp = classNameWithPath.replaceAll("/", "\\.");
@@ -64,7 +58,7 @@ public class JarViewer {
                 ctClassesList.add(classPool.get(tempClassName));
             }
         } catch (NotFoundException e) {
-            System.out.println("I couldnt find this crap");
+            System.out.println("I couldnt find this ****");
         } finally {
             return ctClassesList;
         }
