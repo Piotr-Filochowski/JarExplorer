@@ -12,6 +12,7 @@ import javassist.CtMethod;
 import main.java.*;
 import main.java.Package;
 import main.java.fields.FieldsManager;
+import main.java.methods.MethodsManager;
 
 import java.io.File;
 import java.util.ArrayList;

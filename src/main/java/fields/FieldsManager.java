@@ -17,7 +17,7 @@ public class FieldsManager {
 
 
         CtField[] fields = selectedPackage.getCtClass().getDeclaredFields();
-        MyObservableList myObservableList = new MyObservableList();
+        MyObservableFieldsList myObservableList = new MyObservableFieldsList();
         for (CtField ctField : fields) {
             myObservableList.add(new Field(ctField));
         }
