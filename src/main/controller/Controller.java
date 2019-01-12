@@ -10,6 +10,7 @@ import javassist.CtClass;
 import main.java.CustomTreeItem;
 import main.java.JarViewer;
 import main.java.Main;
+import main.java.Package;
 import main.java.TreeMaker;
 
 import java.io.File;
@@ -46,7 +47,7 @@ public class Controller {
         JarViewer jarViewer = new JarViewer();
         ArrayList<String> temp = jarViewer.getClassNamesList(selectedJarFile.getPath());
         ArrayList<CtClass> tempCtClassList = jarViewer.getClasses(temp, selectedJarFile.getPath());
-        TreeItem<CustomTreeItem> tempTreeRoot = TreeMaker.makeTree(tempCtClassList);
+        TreeItem<Package> tempTreeRoot = TreeMaker.makeTree(tempCtClassList);
         jarViewer.loadTreeView(anchorPane, tempTreeRoot);
         Main.stage.show();
     }

@@ -14,8 +14,7 @@ import java.util.jar.JarInputStream;
 
 public class JarViewer {
 
-    TreeView<CustomTreeItem> treeView;
-    TreeItem<CustomTreeItem> tempNode;
+    TreeView<Package> treeView;
 
     public JarViewer() {
         treeView = new TreeView<>();
@@ -42,7 +41,7 @@ public class JarViewer {
         return listOfClasses;
     }
 
-    public void loadTreeView(AnchorPane anchorPane, TreeItem<CustomTreeItem> root) {
+    public void loadTreeView(AnchorPane anchorPane, TreeItem<Package> root) {
         treeView.setRoot(root);
         anchorPane.getChildren().add(treeView);
         treeView.prefWidthProperty().bind(anchorPane.widthProperty());

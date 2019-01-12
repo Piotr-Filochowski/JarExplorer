@@ -1,82 +1,103 @@
 package main.java;
 
 
-import com.sun.istack.internal.Nullable;
-import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
+import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javassist.CtClass;
 
 import java.util.ArrayList;
-import java.util.TreeMap;
 
 /*
  * Class that makes Tree out of list of CtClass objects
  */
 public class TreeMaker {
+    private final Node rootIcon = new ImageView(
+            new Image(getClass().getResourceAsStream("folder_16.png"))
+    );
+    static TreeView<Package> treeOfPackages = new TreeView<>();
+    static TreeItem<Package> rootNode = new TreeItem<Package>(new Package("RootName", true));
 
-    static TreeMap<String, Package> treeOfPackages = new TreeMap<String, Package>();
-
-
-    static public TreeItem<CustomTreeItem> makeTree(ArrayList<CtClass> ctClassesList) {
-        String tempPackageName;
-        Package myPackage;
-        treeOfPackages.put("RootNode", new Package(null, "Root.Node"));
+    static public TreeItem<Package> makeTree(ArrayList<CtClass> ctClassesList) {
+        treeOfPackages.setRoot(rootNode);
         for (CtClass ctClass : ctClassesList) {
             addNewClass(ctClass);
         }
-        return null;
+
+        return rootNode;
     }
 
     private static void addNewClass(CtClass ctClass) {
-        Package tempPackage = whereShouldIAddClass(ctClass.getPackageName());
-        if (tempPackage != null) {
-            tempPackage.getClassContent().add(ctClass);
-        } else {
-            createNewPackage(ctClass.getPackageName());
-        }
-    }
+        ArrayList<String> listOfPackagesFromParent = getPackagesPathList(ctClass.getPackageName());
+        TreeItem<Package> tempRoot = rootNode;
+        TreeItem<Package> iterator;
+        boolean allPackagesExist = true;
+        for (String packageSignature : listOfPackagesFromParent) {
+            iterator = findInChildren(tempRoot, packageSignature);
 
-    private static void createNewPackage(String fullPackageName) {
-        String onlyName = getNameOfPackage(fullPackageName);
-        String parentPackageName = getFullNameAfterLastDot(fullPackageName);
-        Package where = whereShouldIAddClass(parentPackageName);
-        if (where != null) {
-            addPackageToTree(new Package(where, fullPackageName), where);
-        } else {
-            if (parentPackageName == null) {
-                // Add to root
-                Package root = treeOfPackages.get("RootNode");
-                addPackageToTree(new Package(root, onlyName), root);
-                return;
+            if (iterator == null) {
+                allPackagesExist = false;
+
+            } else tempRoot = iterator;
+            if (!allPackagesExist) {
+                TreeItem<Package> newPackage = new TreeItem<Package>(new Package(packageSignature, true));
+                tempRoot.getChildren().add(newPackage);
+                tempRoot = newPackage;
             }
-            createNewPackage(parentPackageName);
         }
+        addClassToTreeView(tempRoot, ctClass);
     }
 
-    private static void addPackageToTree(Package myPackage, Package where) {
-        treeOfPackages.get(where).getPackagesContent().add(myPackage);
+    private static void addClassToTreeView(TreeItem<Package> where, CtClass what) {
+        Package myPackage = new Package(getNameOfPackage(what.getName()), false, what);
+        where.getChildren().add(new TreeItem<Package>(myPackage));
+    }
+
+    private static TreeItem<Package> findInChildren(TreeItem<Package> where, String what) {
+        if (what == null || what == null) return null;
+        if (where != null && where.getValue().equals(what)) {
+            return where;
+        }
+        TreeItem<Package> result = null;
+        for (TreeItem<Package> child : where.getChildren()) {
+            String temp = child.getValue().toString();
+            if (temp.equals(what)) {
+                if (where.getValue().isPackage() == true) {
+                    result = child;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    private static ArrayList<String> getPackagesPathList(String packageName) {
+        // TODO ->      com.diamond.ian.javagame.entities -> { com; diamond; ian; javagame; entities; }
+        ArrayList<String> packagesPathList = new ArrayList<String>();
+        String temp;
+        String tempStringTwo = packageName;
+        while (true) {
+            if (!tempStringTwo.contains(".")) {
+                packagesPathList.add(tempStringTwo);
+                break;
+            }
+            temp = tempStringTwo.substring(0, tempStringTwo.indexOf("."));
+            packagesPathList.add(temp);
+            tempStringTwo = tempStringTwo.replace(temp, "");
+            tempStringTwo = tempStringTwo.substring(1);
+            if (temp == null) {
+                break;
+            }
+        }
+        return packagesPathList;
     }
 
     private static String getNameOfPackage(String fullClassName) {
         // com.als.name ---> name
+        if (fullClassName == null) return null;
         return fullClassName.substring(fullClassName.lastIndexOf(".") + 1);
     }
 
-    private static String getFullNameAfterLastDot(String fullClassName) {
-        // com.als.name ---> com.als
-        try {
-            return fullClassName.substring(0, fullClassName.lastIndexOf("."));
-        } catch (StringIndexOutOfBoundsException e) {
-            return null;
-        }
-    }
-
-    @Nullable
-    private static Package whereShouldIAddClass(String fullPackageName) {
-        if (fullPackageName == null) return null;
-        if (treeOfPackages.containsKey(fullPackageName)) {
-            return treeOfPackages.get(fullPackageName);
-        } else return null;
-    }
 }

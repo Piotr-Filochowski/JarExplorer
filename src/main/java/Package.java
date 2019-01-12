@@ -5,29 +5,23 @@ import javassist.CtClass;
 import java.util.ArrayList;
 
 public class Package {
-    private ArrayList<CtClass> classContent;
-    private ArrayList<Package> packagesContent;
-    private Package parent;
+    private CtClass ctClass;
+    private boolean isPackage;
     private String packageName;
-    private String fullName;
 
-    public Package(Package parent, String fullName) {
-        this.parent = parent;
-        this.fullName = fullName;
-        classContent = new ArrayList<CtClass>();
-        packagesContent = new ArrayList<Package>();
+
+    public Package(String signatureName, boolean isPackage) {
+        this.isPackage = isPackage;
+        packageName = signatureName;
     }
 
-    public ArrayList<CtClass> getClassContent() {
-        return classContent;
+    public Package(String signatureName, boolean isPackage, CtClass ctClass) {
+        this(signatureName, isPackage);
+        this.ctClass = ctClass;
     }
 
-    public ArrayList<Package> getPackagesContent() {
-        return packagesContent;
-    }
-
-    public Package getParent() {
-        return parent;
+    public CtClass getCtClass() {
+        return ctClass;
     }
 
     public String getPackageName() {
@@ -35,27 +29,16 @@ public class Package {
     }
 
     public String getFullName() {
-        return fullName;
+        // TODO
+        return null;
     }
 
-    public void setClassContent(ArrayList<CtClass> classContent) {
-        this.classContent = classContent;
+    public boolean isPackage() {
+        return isPackage;
     }
 
-    public void setPackagesContent(ArrayList<Package> packagesContent) {
-        this.packagesContent = packagesContent;
+    @Override
+    public String toString() {
+        return getPackageName();
     }
-
-    public void setParent(Package parent) {
-        this.parent = parent;
-    }
-
-    public void setPackageName(String packageName) {
-        this.packageName = packageName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
 }
