@@ -2,20 +2,21 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fillWidth="false" prefHeight="435.0" prefWidth="574.0" xmlns="http://javafx.com/javafx/10.0.1"
+<VBox fillWidth="false" prefHeight="535.0" prefWidth="609.0" xmlns="http://javafx.com/javafx/10.0.1"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controller.Controller">
     <children>
-        <MenuBar prefHeight="25.0" prefWidth="581.0" VBox.vgrow="NEVER">
+        <MenuBar prefHeight="25.0" prefWidth="615.0" VBox.vgrow="NEVER">
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
@@ -31,14 +32,12 @@
             <children>
                 <HBox prefHeight="25.0" prefWidth="342.0" spacing="5.0">
                     <children>
-                        <Label text="Tree of classes"/>
                         <Button mnemonicParsing="false" text="Add class"/>
                         <Button mnemonicParsing="false" text="Delete class"/>
                     </children>
                 </HBox>
                 <HBox prefHeight="25.0" prefWidth="227.0" spacing="5.0">
                     <children>
-                        <Label text="Fields"/>
                         <Button mnemonicParsing="false" text="Add Field"/>
                         <Button mnemonicParsing="false" text="Delete Field"/>
                     </children>
@@ -50,20 +49,34 @@
         </HBox>
         <HBox prefHeight="125.0" prefWidth="574.0">
             <children>
-                <TreeView fx:id="treeOfClasses" onMouseClicked="#reloadFieldAndMethodList" prefHeight="125.0"
-                          prefWidth="353.0"/>
-                <ListView fx:id="listOfFields" prefHeight="125.0" prefWidth="221.0"/>
+                <TitledPane animated="false" collapsible="false" contentDisplay="BOTTOM" text="Class List">
+                    <graphic>
+                        <TreeView fx:id="treeOfClasses" onMouseClicked="#reloadFieldAndMethodList" prefHeight="192.0"
+                                  prefWidth="353.0"/>
+                    </graphic>
+                </TitledPane>
+                <TitledPane animated="false" collapsible="false" contentDisplay="BOTTOM" text="Fields List">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+                    </content>
+                    <graphic>
+                        <ListView fx:id="listOfFields" prefHeight="192.0" prefWidth="221.0"/>
+                    </graphic>
+                </TitledPane>
             </children>
         </HBox>
         <HBox prefHeight="33.0" prefWidth="574.0" spacing="20.0">
             <children>
-                <Label text="Methods"/>
                 <Button mnemonicParsing="false" text="Add Method"/>
             </children>
             <padding>
                 <Insets bottom="10.0" left="20.0" top="10.0"/>
             </padding>
         </HBox>
-        <ListView fx:id="listOfMethods" prefHeight="200.0" prefWidth="579.0"/>
+        <TitledPane collapsible="false" prefHeight="147.0" prefWidth="613.0" text="Methods">
+            <content>
+                <ListView fx:id="listOfMethods" prefHeight="122.0" prefWidth="610.0"/>
+            </content>
+        </TitledPane>
     </children>
 </VBox>
