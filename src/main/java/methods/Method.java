@@ -1,8 +1,10 @@
 package main.java.methods;
 
 
+import javassist.CannotCompileException;
 import javassist.CtMethod;
 import javassist.Modifier;
+import main.java.AlertBox;
 
 public class Method {
 
@@ -19,5 +21,13 @@ public class Method {
         if (modString.length() != 0) {
             return (modString + " " + ctMethod.getName());
         } else return (ctMethod.getName());
+    }
+
+    public void addCodeBegoreCall() {
+        try {
+            ctMethod.insertBefore("System.out.println(\"Hello\")");
+        } catch (CannotCompileException e) {
+            AlertBox.displayError("ERROR", e.getMessage());
+        }
     }
 }

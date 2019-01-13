@@ -47,13 +47,13 @@ public class Controller {
 
     @FXML
     void addCodeBeforeCall(MouseEvent event) {
-        if (treeOfClasses.getRoot() == null) return;
+        if (listOfMethods.getFocusModel() == null) return;
         Package selectedPackage = treeOfClasses.getFocusModel().getFocusedItem().getValue();
         Method selectedMethod = listOfMethods.getFocusModel().getFocusedItem();
         if (selectedPackage.isPackage() == true) {
             return;
         } else {
-            //       methodsManager.addCodeBeforeCall();
+            selectedMethod.addCodeBegoreCall();
         }
     }
 
