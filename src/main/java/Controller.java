@@ -36,13 +36,9 @@ public class Controller {
     @FXML
     void addCodeBeforeCall(MouseEvent event) {
         if (listOfMethods.getFocusModel() == null) return;
-        MyPackage selectedMyPackage = treeOfClasses.getFocusModel().getFocusedItem().getValue();
         Method selectedMethod = listOfMethods.getFocusModel().getFocusedItem();
-        if (selectedMyPackage.isPackage() == true) {
-            return;
-        } else {
-            selectedMethod.addCodeBegoreCall();
-        }
+        selectedMethod.addCodeBeforeCall();
+
     }
 
 

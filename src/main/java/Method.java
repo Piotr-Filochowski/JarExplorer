@@ -20,11 +20,12 @@ public class Method {
         } else return (ctMethod.getName());
     }
 
-    public void addCodeBegoreCall() {
+    public void addCodeBeforeCall() {
+        String input = PopupWindow.getInputCode("What would u like to do before " + ctMethod.getName() + "?");
         try {
-            ctMethod.insertBefore("System.out.println(\"Hello\")");
+            ctMethod.insertBefore(input);
         } catch (CannotCompileException e) {
-            AlertBox.displayError("ERROR", e.getMessage());
+            PopupWindow.displayError("ERROR", e.getMessage());
         }
     }
 }
