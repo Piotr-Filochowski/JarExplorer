@@ -14,6 +14,10 @@ public class Controller {
 
     MethodsManager methodsManager;
 
+    ArrayList<CtClass> tempCtClassList = null;
+
+    String pathToJar;
+
     @FXML
     private TreeView<MyPackage> treeOfClasses;
 
@@ -84,8 +88,9 @@ public class Controller {
         methodsManager = new MethodsManager(listOfMethods);
         File selectedJarFile = Main.fileChoose();
         JarViewer jarViewer = new JarViewer();
-        ArrayList<String> temp = jarViewer.getClassNamesList(selectedJarFile.getPath());
-        ArrayList<CtClass> tempCtClassList = jarViewer.getClasses(temp, selectedJarFile.getPath());
+        pathToJar = selectedJarFile.getPath();
+        ArrayList<String> classNamesList = jarViewer.getClassNamesList(pathToJar);
+        tempCtClassList = jarViewer.getClasses(classNamesList, selectedJarFile.getPath());
         TreeMaker treeMaker = new TreeMaker();
         TreeItem<MyPackage> tempTreeRoot = treeMaker.makeTree(tempCtClassList);
         treeOfClasses.setRoot(tempTreeRoot);
@@ -105,7 +110,13 @@ public class Controller {
 
     @FXML
     void saveFile() {
-
+        JarExporter jarExporter = new JarExporter();
+        String where = "";
+        String newName = "ModifiedJar";
+        CtClass[] array = new CtClass[tempCtClassList.size()];
+        tempCtClassList.toArray(array);
+        jarExporter.exportJar(array, pathToJar, "C:\\Users\\Piotr\\Desktop\\Studia\\Invaders_2.jar");
+        System.out.println("Done");
     }
 
     @FXML

@@ -19,8 +19,9 @@ public class JarViewer {
 
     public ArrayList<String> getClassNamesList(String jarPath) {
         ArrayList<String> listOfClasses = new ArrayList<>();
+        JarInputStream jarInputStream;
         try {
-            JarInputStream jarInputStream = new JarInputStream(new FileInputStream(jarPath));
+            jarInputStream = new JarInputStream(new FileInputStream(jarPath));
             JarEntry temp = jarInputStream.getNextJarEntry();
             while (true) {
                 if (temp == null) {
@@ -31,9 +32,12 @@ public class JarViewer {
                 }
                 temp = jarInputStream.getNextJarEntry();
             }
+            jarInputStream.close();
 
         } catch (Exception e) {
             System.out.println("Oops.. Encounter an issue while parsing jar" + e.toString());
+        } finally {
+
         }
         return listOfClasses;
     }
