@@ -1,8 +1,5 @@
-package main.java.fields;
-
 import javafx.scene.control.ListView;
 import javassist.CtField;
-import main.java.Package;
 
 
 public class FieldsManager {
@@ -13,7 +10,7 @@ public class FieldsManager {
         this.listOfFields = listOfMethods;
     }
 
-    public void loadFiledList(Package selectedPackage) {
+    public void loadFiledList(MyPackage selectedPackage) {
 
 
         CtField[] fields = selectedPackage.getCtClass().getDeclaredFields();

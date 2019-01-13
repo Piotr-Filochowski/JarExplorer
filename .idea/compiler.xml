@@ -10,6 +10,8 @@
       <entry name="!?*.flex" />
       <entry name="!?*.kt" />
       <entry name="!?*.clj" />
+      <entry name="?*.fxml" />
+      <entry name="?*.css" />
     </wildcardResourcePatterns>
     <annotationProcessing>
       <profile name="Maven default annotation processors profile" enabled="true">
@@ -20,7 +22,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="8">
-      <module name="JarExplorer" target="8" />
+      <module name="JarExplorer" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

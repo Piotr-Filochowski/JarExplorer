@@ -1,8 +1,5 @@
-package main.java;
 
-import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.layout.AnchorPane;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
@@ -14,7 +11,7 @@ import java.util.jar.JarInputStream;
 
 public class JarViewer {
 
-    TreeView<Package> treeView;
+    TreeView<MyPackage> treeView;
 
     public JarViewer() {
         treeView = new TreeView<>();

@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox fillWidth="false" prefHeight="535.0" prefWidth="609.0" xmlns="http://javafx.com/javafx/10.0.1"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controller.Controller">
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
     <children>
         <MenuBar prefHeight="25.0" prefWidth="615.0" VBox.vgrow="NEVER">
             <menus>

@@ -1,21 +1,17 @@
-package main.java;
-
 import javassist.CtClass;
 
-import java.util.ArrayList;
-
-public class Package {
+public class MyPackage {
     private CtClass ctClass;
     private boolean isPackage;
     private String packageName;
 
 
-    public Package(String signatureName, boolean isPackage) {
+    public MyPackage(String signatureName, boolean isPackage) {
         this.isPackage = isPackage;
         packageName = signatureName;
     }
 
-    public Package(String signatureName, boolean isPackage, CtClass ctClass) {
+    public MyPackage(String signatureName, boolean isPackage, CtClass ctClass) {
         this(signatureName, isPackage);
         this.ctClass = ctClass;
     }

@@ -1,4 +1,4 @@
-package main.java;
+
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -8,7 +8,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import main.controller.Controller;
+
 import javafx.stage.FileChooser.*;
 
 import java.io.File;
@@ -24,7 +24,7 @@ public class Main extends Application {
         this.stage = primaryStage;
 
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(this.getClass().getResource("/main/FXML/mainScreen.fxml"));
+        fxmlLoader.setLocation(this.getClass().getResource("mainScreen.fxml"));
 
         VBox vBox = fxmlLoader.load();
         Controller controller = fxmlLoader.getController();

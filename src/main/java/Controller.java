@@ -1,24 +1,12 @@
-package main.controller;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
 import javassist.CtClass;
-import javassist.CtField;
-import javassist.CtMethod;
-import main.java.*;
-import main.java.Package;
-import main.java.fields.Field;
-import main.java.fields.FieldsManager;
-import main.java.methods.Method;
-import main.java.methods.MethodsManager;
 
 import java.io.File;
 import java.util.ArrayList;
-
 
 public class Controller {
 
@@ -27,7 +15,7 @@ public class Controller {
     MethodsManager methodsManager;
 
     @FXML
-    private TreeView<Package> treeOfClasses;
+    private TreeView<MyPackage> treeOfClasses;
 
     @FXML
     private ListView<Field> listOfFields;
@@ -48,9 +36,9 @@ public class Controller {
     @FXML
     void addCodeBeforeCall(MouseEvent event) {
         if (listOfMethods.getFocusModel() == null) return;
-        Package selectedPackage = treeOfClasses.getFocusModel().getFocusedItem().getValue();
+        MyPackage selectedMyPackage = treeOfClasses.getFocusModel().getFocusedItem().getValue();
         Method selectedMethod = listOfMethods.getFocusModel().getFocusedItem();
-        if (selectedPackage.isPackage() == true) {
+        if (selectedMyPackage.isPackage() == true) {
             return;
         } else {
             selectedMethod.addCodeBegoreCall();
@@ -103,19 +91,19 @@ public class Controller {
         ArrayList<String> temp = jarViewer.getClassNamesList(selectedJarFile.getPath());
         ArrayList<CtClass> tempCtClassList = jarViewer.getClasses(temp, selectedJarFile.getPath());
         TreeMaker treeMaker = new TreeMaker();
-        TreeItem<Package> tempTreeRoot = treeMaker.makeTree(tempCtClassList);
+        TreeItem<MyPackage> tempTreeRoot = treeMaker.makeTree(tempCtClassList);
         treeOfClasses.setRoot(tempTreeRoot);
     }
 
     @FXML
     void reloadFieldAndMethodList(MouseEvent event) {
         if (treeOfClasses.getRoot() == null) return;
-        Package selectedPackage = treeOfClasses.getFocusModel().getFocusedItem().getValue();
-        if (selectedPackage.isPackage() == true) {
+        MyPackage selectedMyPackage = treeOfClasses.getFocusModel().getFocusedItem().getValue();
+        if (selectedMyPackage.isPackage() == true) {
             return;
         } else {
-            fieldsManager.loadFiledList(selectedPackage);
-            methodsManager.loadMethodList(selectedPackage);
+            fieldsManager.loadFiledList(selectedMyPackage);
+            methodsManager.loadMethodList(selectedMyPackage);
         }
     }
 

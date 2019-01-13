@@ -1,10 +1,7 @@
-package main.java.methods;
-
-
 import javassist.CannotCompileException;
 import javassist.CtMethod;
 import javassist.Modifier;
-import main.java.AlertBox;
+
 
 public class Method {
 

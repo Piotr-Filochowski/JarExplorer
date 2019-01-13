@@ -1,8 +1,6 @@
-package main.java.methods;
-
 import javafx.scene.control.ListView;
 import javassist.CtMethod;
-import main.java.Package;
+
 
 public class MethodsManager {
 
@@ -12,7 +10,7 @@ public class MethodsManager {
         this.listofMethods = listOfMethods;
     }
 
-    public void loadMethodList(Package selectedPackage) {
+    public void loadMethodList(MyPackage selectedPackage) {
         CtMethod[] ctMethods = selectedPackage.getCtClass().getDeclaredMethods();
         MyObservableMethodList myObservableList = new MyObservableMethodList();
         for (CtMethod ctMethod : ctMethods) {

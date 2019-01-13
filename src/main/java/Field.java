@@ -1,5 +1,3 @@
-package main.java.fields;
-
 import javassist.CtField;
 import javassist.Modifier;
 

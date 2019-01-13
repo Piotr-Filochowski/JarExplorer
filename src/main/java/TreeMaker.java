@@ -1,11 +1,7 @@
-package main.java;
 
 
-import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javassist.CtClass;
 
 import java.util.ArrayList;
@@ -15,10 +11,10 @@ import java.util.ArrayList;
  */
 public class TreeMaker {
 
-    static TreeView<Package> treeOfPackages = new TreeView<>();
-    static TreeItem<Package> rootNode = new TreeItem<Package>(new Package("RootName", true));
+    static TreeView<MyPackage> treeOfPackages = new TreeView<>();
+    static TreeItem<MyPackage> rootNode = new TreeItem<MyPackage>(new MyPackage("RootName", true));
 
-    static public TreeItem<Package> makeTree(ArrayList<CtClass> ctClassesList) {
+    static public TreeItem<MyPackage> makeTree(ArrayList<CtClass> ctClassesList) {
         treeOfPackages.setRoot(rootNode);
         for (CtClass ctClass : ctClassesList) {
             addNewClass(ctClass);
@@ -29,8 +25,8 @@ public class TreeMaker {
 
     private static void addNewClass(CtClass ctClass) {
         ArrayList<String> listOfPackagesFromParent = getPackagesPathList(ctClass.getPackageName());
-        TreeItem<Package> tempRoot = rootNode;
-        TreeItem<Package> iterator;
+        TreeItem<MyPackage> tempRoot = rootNode;
+        TreeItem<MyPackage> iterator;
         boolean allPackagesExist = true;
         for (String packageSignature : listOfPackagesFromParent) {
             iterator = findInChildren(tempRoot, packageSignature);
@@ -40,7 +36,7 @@ public class TreeMaker {
 
             } else tempRoot = iterator;
             if (!allPackagesExist) {
-                TreeItem<Package> newPackage = new TreeItem<Package>(new Package(packageSignature, true));
+                TreeItem<MyPackage> newPackage = new TreeItem<MyPackage>(new MyPackage(packageSignature, true));
                 tempRoot.getChildren().add(newPackage);
                 tempRoot = newPackage;
             }
@@ -48,18 +44,18 @@ public class TreeMaker {
         addClassToTreeView(tempRoot, ctClass);
     }
 
-    private static void addClassToTreeView(TreeItem<Package> where, CtClass what) {
-        Package myPackage = new Package(getNameOfPackage(what.getName()), false, what);
-        where.getChildren().add(new TreeItem<Package>(myPackage));
+    private static void addClassToTreeView(TreeItem<MyPackage> where, CtClass what) {
+        MyPackage myPackage = new MyPackage(getNameOfPackage(what.getName()), false, what);
+        where.getChildren().add(new TreeItem<MyPackage>(myPackage));
     }
 
-    private static TreeItem<Package> findInChildren(TreeItem<Package> where, String what) {
+    private static TreeItem<MyPackage> findInChildren(TreeItem<MyPackage> where, String what) {
         if (what == null || what == null) return null;
         if (where != null && where.getValue().equals(what)) {
             return where;
         }
-        TreeItem<Package> result = null;
-        for (TreeItem<Package> child : where.getChildren()) {
+        TreeItem<MyPackage> result = null;
+        for (TreeItem<MyPackage> child : where.getChildren()) {
             String temp = child.getValue().toString();
             if (temp.equals(what)) {
                 if (where.getValue().isPackage() == true) {
