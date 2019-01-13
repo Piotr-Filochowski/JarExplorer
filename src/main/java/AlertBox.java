@@ -34,6 +34,6 @@ public class AlertBox {
 
 
     public String getInputCode() {
-
+        return null;
     }
 }
