@@ -6,9 +6,9 @@ import main.java.Package;
 
 public class MethodsManager {
 
-    private ListView<CtMethod> listofMethods;
+    private ListView<Method> listofMethods;
 
-    public MethodsManager(ListView<CtMethod> listOfMethods) {
+    public MethodsManager(ListView<Method> listOfMethods) {
         this.listofMethods = listOfMethods;
     }
 

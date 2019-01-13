@@ -7,9 +7,9 @@ import main.java.Package;
 
 public class FieldsManager {
 
-    private ListView<?> listOfFields;
+    private ListView<Field> listOfFields;
 
-    public FieldsManager(ListView<?> listOfMethods) {
+    public FieldsManager(ListView<Field> listOfMethods) {
         this.listOfFields = listOfMethods;
     }
 

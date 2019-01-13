@@ -14,9 +14,7 @@ import java.util.ArrayList;
  * Class that makes Tree out of list of CtClass objects
  */
 public class TreeMaker {
-    private final Node rootIcon = new ImageView(
-            new Image(getClass().getResourceAsStream("folder_16.png"))
-    );
+
     static TreeView<Package> treeOfPackages = new TreeView<>();
     static TreeItem<Package> rootNode = new TreeItem<Package>(new Package("RootName", true));
 

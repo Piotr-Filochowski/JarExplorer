@@ -11,7 +11,9 @@ import javassist.CtField;
 import javassist.CtMethod;
 import main.java.*;
 import main.java.Package;
+import main.java.fields.Field;
 import main.java.fields.FieldsManager;
+import main.java.methods.Method;
 import main.java.methods.MethodsManager;
 
 import java.io.File;
@@ -21,25 +23,76 @@ import java.util.ArrayList;
 public class Controller {
 
     FieldsManager fieldsManager;
+
     MethodsManager methodsManager;
-
-    @FXML
-    private MenuItem openFile;
-
-    @FXML
-    private MenuItem saveFile;
-
-    @FXML
-    private MenuItem quit;
 
     @FXML
     private TreeView<Package> treeOfClasses;
 
     @FXML
-    private ListView<CtField> listOfFields;
+    private ListView<Field> listOfFields;
 
     @FXML
-    private ListView<CtMethod> listOfMethods;
+    private ListView<Method> listOfMethods;
+
+    @FXML
+    void addClass(MouseEvent event) {
+        // TODO
+    }
+
+    @FXML
+    void addCodeAfterCall(MouseEvent event) {
+        // TODO
+    }
+
+    @FXML
+    void addCodeBeforeCall(MouseEvent event) {
+        if (treeOfClasses.getRoot() == null) return;
+        Package selectedPackage = treeOfClasses.getFocusModel().getFocusedItem().getValue();
+        Method selectedMethod = listOfMethods.getFocusModel().getFocusedItem();
+        if (selectedPackage.isPackage() == true) {
+            return;
+        } else {
+            //       methodsManager.addCodeBeforeCall();
+        }
+    }
+
+
+    @FXML
+    void addField(MouseEvent event) {
+        // TODO
+    }
+
+    @FXML
+    void addMethod(MouseEvent event) {
+        // TODO
+    }
+
+    @FXML
+    void addPackage(MouseEvent event) {
+        // TODO
+    }
+
+    @FXML
+    void deleteAddedMethod(MouseEvent event) {
+        // TODO
+    }
+
+    @FXML
+    void deleteAddedPackage(MouseEvent event) {
+        // TODO
+    }
+
+    @FXML
+    void deleteClass(MouseEvent event) {
+        // TODO
+    }
+
+    @FXML
+    void deleteField(MouseEvent event) {
+        // TODO
+    }
+
 
     @FXML
     void openFileAndLoadIt() {
@@ -49,7 +102,8 @@ public class Controller {
         JarViewer jarViewer = new JarViewer();
         ArrayList<String> temp = jarViewer.getClassNamesList(selectedJarFile.getPath());
         ArrayList<CtClass> tempCtClassList = jarViewer.getClasses(temp, selectedJarFile.getPath());
-        TreeItem<Package> tempTreeRoot = TreeMaker.makeTree(tempCtClassList);
+        TreeMaker treeMaker = new TreeMaker();
+        TreeItem<Package> tempTreeRoot = treeMaker.makeTree(tempCtClassList);
         treeOfClasses.setRoot(tempTreeRoot);
     }
 
