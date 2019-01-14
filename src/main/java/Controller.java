@@ -84,16 +84,21 @@ public class Controller {
 
     @FXML
     void openFileAndLoadIt() {
-        fieldsManager = new FieldsManager(listOfFields);
-        methodsManager = new MethodsManager(listOfMethods);
-        File selectedJarFile = Main.fileChoose();
-        JarViewer jarViewer = new JarViewer();
-        pathToJar = selectedJarFile.getPath();
-        ArrayList<String> classNamesList = jarViewer.getClassNamesList(pathToJar);
-        tempCtClassList = jarViewer.getClasses(classNamesList, selectedJarFile.getPath());
-        TreeMaker treeMaker = new TreeMaker();
-        TreeItem<MyPackage> tempTreeRoot = treeMaker.makeTree(tempCtClassList);
-        treeOfClasses.setRoot(tempTreeRoot);
+        File selectedJarFile;
+        try {
+            fieldsManager = new FieldsManager(listOfFields);
+            methodsManager = new MethodsManager(listOfMethods);
+            selectedJarFile = Main.fileChoose();
+            JarViewer jarViewer = new JarViewer();
+            pathToJar = selectedJarFile.getPath();
+            ArrayList<String> classNamesList = jarViewer.getClassNamesList(pathToJar);
+            tempCtClassList = jarViewer.getClasses(classNamesList, selectedJarFile.getPath());
+            TreeMaker treeMaker = new TreeMaker();
+            TreeItem<MyPackage> tempTreeRoot = treeMaker.makeTree(tempCtClassList);
+            treeOfClasses.setRoot(tempTreeRoot);
+        } catch (NullPointerException e) {
+            return; // user didnt choose any file
+        }
     }
 
     @FXML
@@ -110,13 +115,18 @@ public class Controller {
 
     @FXML
     void saveFile() {
-        JarExporter jarExporter = new JarExporter();
-        String where = "";
-        String newName = "ModifiedJar";
-        CtClass[] array = new CtClass[tempCtClassList.size()];
-        tempCtClassList.toArray(array);
-        jarExporter.exportJar(array, pathToJar, "C:\\Users\\Piotr\\Desktop\\Studia\\Invaders_2.jar");
-        System.out.println("Done");
+        File newFile;
+        if (pathToJar == null) return;
+        try {
+            newFile = Main.saveFile();
+            JarExporter jarExporter = new JarExporter();
+            CtClass[] array = new CtClass[tempCtClassList.size()];
+            tempCtClassList.toArray(array);
+            jarExporter.exportJar(array, pathToJar, newFile.getPath());
+        } catch (NullPointerException e) {
+            return; // user didnt choose any file
+        }
+
     }
 
     @FXML

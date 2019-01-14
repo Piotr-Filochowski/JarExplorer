@@ -47,4 +47,16 @@ public class Main extends Application {
         return null;
 
     }
+
+    public static File saveFile() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Jar");
+        fileChooser.getExtensionFilters().add(
+                new ExtensionFilter("Jar Files", "*.jar"));
+        File file = fileChooser.showSaveDialog(stage);
+        System.out.println("Name: " + file.getName() + ", Path: " + file.getPath());
+        return file;
+    }
+
+
 }
