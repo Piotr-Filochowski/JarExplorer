@@ -1,16 +1,23 @@
-import javafx.event.Event;
+package Controllers;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javassist.CannotCompileException;
 import javassist.CtClass;
 import javassist.CtField;
 import javassist.NotFoundException;
-
 import java.io.File;
 import java.util.ArrayList;
+
+import JarActions.*;
+import UserInterface.*;
+import Field.*;
+import Method.*;
 
 public class Controller {
 
@@ -22,6 +29,8 @@ public class Controller {
 
     String pathToJar;
 
+    private Stage stage;
+
     @FXML
     private TreeView<MyPackage> treeOfClasses;
 
@@ -30,6 +39,7 @@ public class Controller {
 
     @FXML
     private ListView<Method> listOfMethods;
+
 
     @FXML
     void addClass(MouseEvent event) {
@@ -60,7 +70,7 @@ public class Controller {
         if (selectedMyPackage.isPackage() == true) {
             return;
         }
-        String fieldCode = PopupWindow.getInputCode("Type code of Field here");
+        String fieldCode = PopupWindow.getInputCode("Type code of Field.Field here");
         System.out.println(fieldCode);
         try {
             CtField field = CtField.make(fieldCode, selectedMyPackage.getCtClass());
@@ -112,7 +122,7 @@ public class Controller {
         try {
             fieldsManager = new FieldsManager(listOfFields);
             methodsManager = new MethodsManager(listOfMethods);
-            selectedJarFile = Main.fileChoose();
+            selectedJarFile = fileChooseLoad();
             JarViewer jarViewer = new JarViewer();
             pathToJar = selectedJarFile.getPath();
             ArrayList<String> classNamesList = jarViewer.getClassNamesList(pathToJar);
@@ -142,7 +152,7 @@ public class Controller {
         File newFile;
         if (pathToJar == null) return;
         try {
-            newFile = Main.saveFile();
+            newFile = fileChooseSave();
             JarExporter jarExporter = new JarExporter();
             CtClass[] array = new CtClass[tempCtClassList.size()];
             tempCtClassList.toArray(array);
@@ -167,5 +177,34 @@ public class Controller {
 //        assert x3 != null : "fx:id=\"x3\" was not injected: check your FXML file 'mainScreen.fxml'.";
 //        assert x4 != null : "fx:id=\"x4\" was not injected: check your FXML file 'mainScreen.fxml'.";
 
+    }
+
+    public void sendStage(Stage primaryStage) {
+        this.stage = primaryStage;
+    }
+
+
+    public File fileChooseLoad() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Jar Files", "*.jar"));
+        File selectedFile = fileChooser.showOpenDialog(stage);
+        if (selectedFile != null) {
+            return selectedFile;
+        }
+
+        return null;
+
+    }
+
+    public File fileChooseSave() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Jar");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Jar Files", "*.jar"));
+        File file = fileChooser.showSaveDialog(stage);
+        System.out.println("Name: " + file.getName() + ", Path: " + file.getPath());
+        return file;
     }
 }

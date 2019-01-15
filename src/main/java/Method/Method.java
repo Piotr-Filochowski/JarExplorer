@@ -1,7 +1,10 @@
+package Method;
+
 import javassist.CannotCompileException;
 import javassist.CtMethod;
 import javassist.Modifier;
 
+import UserInterface.*;
 
 public class Method {
 

@@ -1,16 +1,19 @@
+package Method;
+
+import Method.Method;
 import javafx.beans.InvalidationListener;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 import java.util.*;
 
-public class MyObservableFieldsList implements ObservableList {
+public class MyObservableMethodList implements ObservableList {
 
-    ArrayList<Field> list = new ArrayList<Field>();
+    ArrayList<Method> list = new ArrayList<Method>();
 
 
-    public boolean add(Field field) {
-        return list.add(field);
+    public boolean add(Method method) {
+        return list.add(method);
     }
 
 

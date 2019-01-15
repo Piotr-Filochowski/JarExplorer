@@ -1,3 +1,5 @@
+package JarActions;
+
 import javassist.CtClass;
 
 public class MyPackage {

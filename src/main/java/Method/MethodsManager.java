@@ -1,6 +1,8 @@
+package Method;
+
 import javafx.scene.control.ListView;
 import javassist.CtMethod;
-
+import JarActions.*;
 
 public class MethodsManager {
 

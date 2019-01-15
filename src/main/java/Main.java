@@ -1,11 +1,10 @@
+import Controllers.Controller;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.FileChooser.*;
-import java.io.File;
 
 public class Main extends Application {
 
@@ -17,10 +16,15 @@ public class Main extends Application {
         this.stage = primaryStage;
 
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(this.getClass().getResource("FXML/mainScreen.fxml"));
+        fxmlLoader.setLocation(this.getClass().getResource("/FXML/mainScreen.fxml"));
 
+        Node root = new VBox();
+
+        fxmlLoader.setRoot(root);
         VBox vBox = fxmlLoader.load();
         Controller controller = fxmlLoader.getController();
+
+        controller.sendStage(primaryStage);
 
         Scene scene = new Scene(vBox);
         primaryStage.setScene(scene);
@@ -32,28 +36,5 @@ public class Main extends Application {
         launch(args);
     }
 
-    public static File fileChoose() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-        fileChooser.getExtensionFilters().add(
-                new ExtensionFilter("Jar Files", "*.jar"));
-        File selectedFile = fileChooser.showOpenDialog(stage);
-        if (selectedFile != null) {
-            return selectedFile;
-        }
-
-        return null;
-
-    }
-
-    public static File saveFile() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save Jar");
-        fileChooser.getExtensionFilters().add(
-                new ExtensionFilter("Jar Files", "*.jar"));
-        File file = fileChooser.showSaveDialog(stage);
-        System.out.println("Name: " + file.getName() + ", Path: " + file.getPath());
-        return file;
-    }
 
 }
