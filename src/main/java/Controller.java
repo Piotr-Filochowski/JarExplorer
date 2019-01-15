@@ -1,9 +1,13 @@
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
+import javassist.CannotCompileException;
 import javassist.CtClass;
+import javassist.CtField;
+import javassist.NotFoundException;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -34,7 +38,9 @@ public class Controller {
 
     @FXML
     void addCodeAfterCall(MouseEvent event) {
-        // TODO
+        if (listOfMethods.getFocusModel() == null) return;
+        Method selectedMethod = listOfMethods.getFocusModel().getFocusedItem();
+        selectedMethod.addCodeAfterCall();
     }
 
     @FXML
@@ -48,7 +54,25 @@ public class Controller {
 
     @FXML
     void addField(MouseEvent event) {
-        // TODO
+        // CtField.make()'
+        if (treeOfClasses.getRoot() == null) return;
+        MyPackage selectedMyPackage = treeOfClasses.getFocusModel().getFocusedItem().getValue();
+        if (selectedMyPackage.isPackage() == true) {
+            return;
+        }
+        String fieldCode = PopupWindow.getInputCode("Type code of Field here");
+        System.out.println(fieldCode);
+        try {
+            CtField field = CtField.make(fieldCode, selectedMyPackage.getCtClass());
+            selectedMyPackage.getCtClass().addField(field);
+            System.out.println(selectedMyPackage.getCtClass().getName());
+            System.out.println(selectedMyPackage.getCtClass().getDeclaredField("myField").getName());
+            reloadFieldAndMethodList(event);
+        } catch (CannotCompileException e) {
+            PopupWindow.displayError("ERROR", "/n/n" + e.getMessage());
+        } catch (NotFoundException e) {
+            System.out.println("fuck u");
+        }
     }
 
     @FXML

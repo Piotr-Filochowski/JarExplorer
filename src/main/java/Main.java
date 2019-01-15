@@ -17,7 +17,7 @@ public class Main extends Application {
         this.stage = primaryStage;
 
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(this.getClass().getResource("mainScreen.fxml"));
+        fxmlLoader.setLocation(this.getClass().getResource("FXML/mainScreen.fxml"));
 
         VBox vBox = fxmlLoader.load();
         Controller controller = fxmlLoader.getController();
@@ -28,11 +28,9 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-
     public static void main(String[] args) {
         launch(args);
     }
-
 
     public static File fileChoose() {
         FileChooser fileChooser = new FileChooser();
@@ -57,6 +55,5 @@ public class Main extends Application {
         System.out.println("Name: " + file.getName() + ", Path: " + file.getPath());
         return file;
     }
-
 
 }

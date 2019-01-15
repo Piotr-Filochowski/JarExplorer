@@ -3,6 +3,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -37,15 +38,15 @@ public class PopupWindow {
         stage.setTitle(title);
         stage.setMinWidth(400);
         Label label = new Label("Type input code here: ");
-        TextField textField = new TextField();
+        TextArea textArea = new TextArea();
 
         Button button = new Button("Okey");
         button.setOnAction(e -> {
-            result = textField.getText();
+            result = textArea.getText();
             stage.close();
         });
         VBox layout = new VBox();
-        layout.getChildren().addAll(label, textField, button);
+        layout.getChildren().addAll(label, textArea, button);
         layout.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(layout);

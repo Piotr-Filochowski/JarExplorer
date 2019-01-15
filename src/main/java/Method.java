@@ -28,4 +28,14 @@ public class Method {
             PopupWindow.displayError("ERROR", e.getMessage());
         }
     }
+
+    public void addCodeAfterCall() {
+        String input = PopupWindow.getInputCode("What would u like to do after " + ctMethod.getName() + "?");
+        try {
+            ctMethod.insertAfter(input);
+        } catch (CannotCompileException e) {
+            PopupWindow.displayError("ERROR", e.getMessage());
+        }
+    }
+
 }

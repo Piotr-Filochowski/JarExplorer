@@ -11,8 +11,6 @@ public class FieldsManager {
     }
 
     public void loadFiledList(MyPackage selectedPackage) {
-
-
         CtField[] fields = selectedPackage.getCtClass().getDeclaredFields();
         MyObservableFieldsList myObservableList = new MyObservableFieldsList();
         for (CtField ctField : fields) {
