@@ -1,17 +1,18 @@
-package Method;
+package Constructors;
 
-import Method.Method;
 import javafx.beans.InvalidationListener;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 import java.util.*;
 
-public class MyObservableMethodList implements ObservableList {
+public class MyObservableConstructorsList implements ObservableList {
 
-    ArrayList<Method> list = new ArrayList<Method>();
-    public boolean add(Method method) {
-        return list.add(method);
+    ArrayList<Constructor> constructors = new ArrayList<Constructor>();
+
+
+    public boolean add(Constructor constructor) {
+        return constructors.add(constructor);
     }
 
 
@@ -58,7 +59,7 @@ public class MyObservableMethodList implements ObservableList {
 
     @Override
     public int size() {
-        return list.size();
+        return constructors.size();
     }
 
     @Override
@@ -108,7 +109,7 @@ public class MyObservableMethodList implements ObservableList {
 
     @Override
     public Object get(int index) {
-        return list.get(index);
+        return constructors.get(index);
     }
 
     @Override

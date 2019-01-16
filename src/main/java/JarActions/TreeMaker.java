@@ -88,7 +88,7 @@ public class TreeMaker {
         return packagesPathList;
     }
 
-    private static String getNameOfPackage(String fullClassName) {
+    public static String getNameOfPackage(String fullClassName) {
         // com.als.name ---> name
         if (fullClassName == null) return null;
         return fullClassName.substring(fullClassName.lastIndexOf(".") + 1);

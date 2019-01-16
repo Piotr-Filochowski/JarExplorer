@@ -4,6 +4,8 @@ import javafx.scene.control.TreeView;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
+import javassist.bytecode.ClassFile;
+
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.jar.JarEntry;
@@ -13,8 +15,10 @@ import java.util.jar.JarInputStream;
 public class JarViewer {
 
     TreeView<MyPackage> treeView;
+    ClassPool classPool;
 
-    public JarViewer() {
+    public JarViewer(ClassPool classPool) {
+        this.classPool = classPool;
         treeView = new TreeView<>();
     }
 
@@ -45,7 +49,7 @@ public class JarViewer {
     }
 
 
-    public String getClassName(String classNameWithPath) {
+    public static String getClassName(String classNameWithPath) {
         String temp = classNameWithPath.replaceAll("/", "\\.");
         temp = temp.substring(0, temp.lastIndexOf('.'));
         return temp;

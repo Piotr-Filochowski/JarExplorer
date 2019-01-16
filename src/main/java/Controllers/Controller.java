@@ -1,5 +1,7 @@
 package Controllers;
 
+import Constructors.Constructor;
+import Constructors.ConstructorsManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TreeItem;
@@ -7,17 +9,18 @@ import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javassist.CannotCompileException;
-import javassist.CtClass;
-import javassist.CtField;
-import javassist.NotFoundException;
+import javassist.*;
+
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import JarActions.*;
 import UserInterface.*;
 import Field.*;
 import Method.*;
+import javassist.bytecode.ClassFile;
 
 public class Controller {
 
@@ -25,9 +28,13 @@ public class Controller {
 
     MethodsManager methodsManager;
 
+    ConstructorsManager constructorsManager;
+
     ArrayList<CtClass> tempCtClassList = null;
 
     String pathToJar;
+
+    ClassPool classPool;
 
     private Stage stage;
 
@@ -40,10 +47,14 @@ public class Controller {
     @FXML
     private ListView<Method> listOfMethods;
 
+    @FXML
+    private ListView<Constructor> listOfConstructors;
 
     @FXML
     void addClass(MouseEvent event) {
-        // TODO
+
+        ClassPath cp = new URLClassPath("https://mvnrepository.com/artifact/org.python/jython", 80, "/java/", "org.javassist.");
+        classPool.insertClassPath(cp);
     }
 
     @FXML
@@ -71,23 +82,31 @@ public class Controller {
             return;
         }
         String fieldCode = PopupWindow.getInputCode("Type code of Field.Field here");
-        System.out.println(fieldCode);
+
         try {
             CtField field = CtField.make(fieldCode, selectedMyPackage.getCtClass());
             selectedMyPackage.getCtClass().addField(field);
-            System.out.println(selectedMyPackage.getCtClass().getName());
-            System.out.println(selectedMyPackage.getCtClass().getDeclaredField("myField").getName());
             reloadFieldAndMethodList(event);
         } catch (CannotCompileException e) {
             PopupWindow.displayError("ERROR", "/n/n" + e.getMessage());
-        } catch (NotFoundException e) {
-            System.out.println("fuck u");
         }
     }
 
     @FXML
     void addMethod(MouseEvent event) {
-        // TODO
+        MyPackage selectedMyPackage = treeOfClasses.getFocusModel().getFocusedItem().getValue();
+        if (selectedMyPackage.isPackage() == true) {
+            return;
+        }
+        if (treeOfClasses.getRoot() == null) return;
+        String methodCode = PopupWindow.getInputCode("Put Method code here");
+        try {
+            CtMethod method = CtMethod.make(methodCode, selectedMyPackage.getCtClass());
+            selectedMyPackage.getCtClass().addMethod(method);
+            reloadFieldAndMethodList(event);
+        } catch (CannotCompileException e) {
+            PopupWindow.displayError("ERROR", "/n/n" + e.getMessage());
+        }
     }
 
     @FXML
@@ -120,10 +139,11 @@ public class Controller {
     void openFileAndLoadIt() {
         File selectedJarFile;
         try {
+            constructorsManager = new ConstructorsManager(listOfConstructors);
             fieldsManager = new FieldsManager(listOfFields);
             methodsManager = new MethodsManager(listOfMethods);
-            selectedJarFile = fileChooseLoad();
-            JarViewer jarViewer = new JarViewer();
+            selectedJarFile = popupLoadFile();
+            JarViewer jarViewer = new JarViewer(classPool);
             pathToJar = selectedJarFile.getPath();
             ArrayList<String> classNamesList = jarViewer.getClassNamesList(pathToJar);
             tempCtClassList = jarViewer.getClasses(classNamesList, selectedJarFile.getPath());
@@ -144,6 +164,7 @@ public class Controller {
         } else {
             fieldsManager.loadFiledList(selectedMyPackage);
             methodsManager.loadMethodList(selectedMyPackage);
+            constructorsManager.loadConstructorList(selectedMyPackage);
         }
     }
 
@@ -152,7 +173,7 @@ public class Controller {
         File newFile;
         if (pathToJar == null) return;
         try {
-            newFile = fileChooseSave();
+            newFile = popupSaveFile();
             JarExporter jarExporter = new JarExporter();
             CtClass[] array = new CtClass[tempCtClassList.size()];
             tempCtClassList.toArray(array);
@@ -170,21 +191,13 @@ public class Controller {
 
     @FXML
     void initialize() {
-//        assert openFileAndLoadIt != null : "fx:id=\"openFileAndLoadIt\" was not injected: check your FXML file 'mainScreen.fxml'.";
-//        assert saveFile != null : "fx:id=\"saveFile\" was not injected: check your FXML file 'mainScreen.fxml'.";
-//        assert x1 != null : "fx:id=\"x1\" was not injected: check your FXML file 'mainScreen.fxml'.";
-//        assert x2 != null : "fx:id=\"x2\" was not injected: check your FXML file 'mainScreen.fxml'.";
-//        assert x3 != null : "fx:id=\"x3\" was not injected: check your FXML file 'mainScreen.fxml'.";
-//        assert x4 != null : "fx:id=\"x4\" was not injected: check your FXML file 'mainScreen.fxml'.";
-
     }
 
     public void sendStage(Stage primaryStage) {
         this.stage = primaryStage;
     }
 
-
-    public File fileChooseLoad() {
+    public File popupLoadFile() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         fileChooser.getExtensionFilters().add(
@@ -198,7 +211,7 @@ public class Controller {
 
     }
 
-    public File fileChooseSave() {
+    public File popupSaveFile() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save Jar");
         fileChooser.getExtensionFilters().add(
