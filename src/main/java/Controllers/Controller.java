@@ -3,6 +3,7 @@ package Controllers;
 import Constructors.Constructor;
 import Constructors.ConstructorsManager;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -52,13 +53,12 @@ public class Controller {
 
     @FXML
     void addClass(MouseEvent event) {
-
-        ClassPath cp = new URLClassPath("https://mvnrepository.com/artifact/org.python/jython", 80, "/java/", "org.javassist.");
-        classPool.insertClassPath(cp);
+        // TODO
     }
 
     @FXML
     void addCodeAfterCall(MouseEvent event) {
+        if (treeOfClasses.getRoot() == null) return;
         if (listOfMethods.getFocusModel() == null) return;
         Method selectedMethod = listOfMethods.getFocusModel().getFocusedItem();
         selectedMethod.addCodeAfterCall();
@@ -66,6 +66,7 @@ public class Controller {
 
     @FXML
     void addCodeBeforeCall(MouseEvent event) {
+        if (treeOfClasses.getRoot() == null) return;
         if (listOfMethods.getFocusModel() == null) return;
         Method selectedMethod = listOfMethods.getFocusModel().getFocusedItem();
         selectedMethod.addCodeBeforeCall();
@@ -75,7 +76,6 @@ public class Controller {
 
     @FXML
     void addField(MouseEvent event) {
-        // CtField.make()'
         if (treeOfClasses.getRoot() == null) return;
         MyPackage selectedMyPackage = treeOfClasses.getFocusModel().getFocusedItem().getValue();
         if (selectedMyPackage.isPackage() == true) {
@@ -94,6 +94,7 @@ public class Controller {
 
     @FXML
     void addMethod(MouseEvent event) {
+        if (treeOfClasses.getRoot() == null) return;
         MyPackage selectedMyPackage = treeOfClasses.getFocusModel().getFocusedItem().getValue();
         if (selectedMyPackage.isPackage() == true) {
             return;
@@ -111,7 +112,12 @@ public class Controller {
 
     @FXML
     void addPackage(MouseEvent event) {
-        // TODO
+//        if (treeOfClasses.getRoot() == null) return;
+//        try{
+//            classPool.insertClassPath("C:\\Users\\Piotr\\Documents\\Studia\\jython2.5.3\\jython.jar");
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
     }
 
     @FXML
@@ -139,6 +145,7 @@ public class Controller {
     void openFileAndLoadIt() {
         File selectedJarFile;
         try {
+            classPool = new ClassPool(true);
             constructorsManager = new ConstructorsManager(listOfConstructors);
             fieldsManager = new FieldsManager(listOfFields);
             methodsManager = new MethodsManager(listOfMethods);
@@ -170,6 +177,7 @@ public class Controller {
 
     @FXML
     void saveFile() {
+        if (treeOfClasses.getRoot() == null) return;
         File newFile;
         if (pathToJar == null) return;
         try {
@@ -189,8 +197,31 @@ public class Controller {
         System.exit(0);
     }
 
+    //=======================================================
+    @FXML
+    private Button addClass;
+    @FXML
+    private Button deleteClass;
+    @FXML
+    private Button addPackage;
+    @FXML
+    private Button deletePackage;
+    @FXML
+    private Button deleteField;
+    @FXML
+    private Button deleteMethod;
+
     @FXML
     void initialize() {
+        listOfMethods = new ListView<Method>();
+        listOfConstructors = new ListView<Constructor>();
+        listOfFields = new ListView<Field>();
+        addClass.setDisable(true);
+        deleteClass.setDisable(true);
+//        addPackage.setDisable(true);
+        deletePackage.setDisable(true);
+        deleteField.setDisable(true);
+        deleteMethod.setDisable(true);
     }
 
     public void sendStage(Stage primaryStage) {

@@ -59,7 +59,7 @@ public class JarViewer {
     public ArrayList<CtClass> getClasses(ArrayList<String> listOfClasses, String jarPath) {
         ArrayList<CtClass> ctClassesList = new ArrayList<CtClass>();
         try {
-            ClassPool classPool = new ClassPool(true);
+            classPool = new ClassPool(true);
             classPool.insertClassPath(jarPath);
             for (String tempClassName : listOfClasses) {
                 ctClassesList.add(classPool.get(tempClassName));

@@ -11,6 +11,7 @@ public class MyPackage {
     public MyPackage(String signatureName, boolean isPackage) {
         this.isPackage = isPackage;
         packageName = signatureName;
+
     }
 
     public MyPackage(String signatureName, boolean isPackage, CtClass ctClass) {
