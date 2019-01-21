@@ -34,7 +34,6 @@ public class JarViewer {
                 }
                 if (temp.getName().endsWith(".class")) {
                     listOfClasses.add(getClassName(temp.getName()));
-                    System.out.println(temp.getName());
                 }
                 temp = jarInputStream.getNextJarEntry();
             }

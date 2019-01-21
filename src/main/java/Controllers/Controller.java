@@ -197,7 +197,6 @@ public class Controller {
         System.exit(0);
     }
 
-    //=======================================================
     @FXML
     private Button addClass;
     @FXML
@@ -213,12 +212,10 @@ public class Controller {
 
     @FXML
     void initialize() {
-        listOfMethods = new ListView<Method>();
-        listOfConstructors = new ListView<Constructor>();
-        listOfFields = new ListView<Field>();
+        addPackage.setDisable(true);
         addClass.setDisable(true);
         deleteClass.setDisable(true);
-//        addPackage.setDisable(true);
+        addPackage.setDisable(true);
         deletePackage.setDisable(true);
         deleteField.setDisable(true);
         deleteMethod.setDisable(true);
